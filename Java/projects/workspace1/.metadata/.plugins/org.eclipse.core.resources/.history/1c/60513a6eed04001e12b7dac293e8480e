@@ -1,0 +1,5 @@
+package com.consumer.api.model;
+
+public class Note {
+
+}

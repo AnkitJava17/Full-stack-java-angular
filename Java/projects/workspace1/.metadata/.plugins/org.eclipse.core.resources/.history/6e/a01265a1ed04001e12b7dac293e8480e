@@ -1,0 +1,5 @@
+package com.consumer.api.feignconfig;
+
+public interface UserRestConsumer {
+
+}

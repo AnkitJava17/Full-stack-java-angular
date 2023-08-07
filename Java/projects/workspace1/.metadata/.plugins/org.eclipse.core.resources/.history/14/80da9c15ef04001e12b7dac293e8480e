@@ -1,0 +1,5 @@
+package com.consumer.api.controller;
+
+public class UserFeignController {
+
+}

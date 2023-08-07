@@ -1,0 +1,12 @@
+package com.rest.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.*;
+import com.rest.service.IUserService;
+
+public class userAuthControl {
+	private Map<String, String> map = new HashMap<>();
+	
+	@Autowired
+	private IUserService userService;
+}

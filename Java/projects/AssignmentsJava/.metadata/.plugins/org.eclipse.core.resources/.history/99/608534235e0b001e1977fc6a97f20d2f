@@ -1,0 +1,102 @@
+package com.stackroute.newz.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.stackroute.newz.model.News;
+import com.stackroute.newz.repository.NewsRepository;
+import com.stackroute.newz.util.exception.NewsAlreadyExistsException;
+import com.stackroute.newz.util.exception.NewsNotExistsException;
+
+
+/*
+ * This class is implementing the NewsService interface. This class has to be annotated with 
+ * @Service annotation.
+ * @Service - is an annotation that annotates classes at the service layer, thus 
+ * clarifying it's role.
+ * 
+ * */
+@Service
+public class NewsServiceImpl implements NewsService {
+
+	/*
+	 * Auto-wiring should be implemented for the NewsRepository.
+	 */
+	
+	 @Autowired
+	 NewsRepository newsRepository;
+	/*
+	 * Add a new news. Throw NewsAlreadyExistsException if the news with specified
+	 * newsId already exists.
+	 */
+	public News addNews(News news) throws NewsAlreadyExistsException {
+		News news1 = newsRepository.getOne(news.getNewsId());
+		News newsObj = null;
+		if (news1 != null) {
+			throw new NewsAlreadyExistsException();
+		} else {
+			newsObj = newsRepository.save(news);
+			return newsObj;
+
+		}
+	}
+
+	/*
+	 * Retrieve an existing news by it's newsId. Throw NewsNotExistsException if the 
+	 * news with specified newsId does not exist.
+	 */
+	public News getNews(int newsId) throws NewsNotExistsException {
+		Optional<News> news = newsRepository.findById(newsId);
+		News getNews = null;
+		
+		if (news.isEmpty()) {
+			throw new NewsNotExistsException();
+		}
+		else{
+			getNews = news.get();
+		}
+		return getNews;
+	}
+
+	/*
+	 * Retrieve all existing news
+	 */
+	public List<News> getAllNews() {
+		return newsRepository.findAll();
+	}
+
+	
+	/*
+	 * Update an existing news by it's newsId. Throw NewsNotExistsException if the 
+	 * news with specified newsId does not exist.
+	 */
+	public News updateNews(News news) throws NewsNotExistsException {
+		News nNews = newsRepository.getOne(news.getNewsId());
+		News newsObj = null;
+		if (nNews == null) {
+			throw new NewsNotExistsException();
+		}else {
+			newsObj = newsRepository.saveAndFlush(news);
+			return newsObj;
+		}
+		
+	}
+
+	/*
+	 * Delete an existing news by it's newsId. Throw NewsNotExistsException if the 
+	 * news with specified newsId does not exist.
+	 */
+	public void deleteNews(int newsId) throws NewsNotExistsException {
+		News news = newsRepository.getOne(newsId);
+		if (news == null) {
+			throw new NewsNotExistsException();
+		}
+		else{
+			newsRepository.deleteById(newsId);
+		}
+	}
+
+}
